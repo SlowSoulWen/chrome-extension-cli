@@ -1,0 +1,33 @@
+{
+  "name": "chrome-extension-cli",
+  "version": "1.0.0",
+  "description": "基于vue-cli的Chrome扩展程序开发脚手架",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "@chrome-extension-cli/chrome-extension-cli": "bin/create-cli-project",
+    "chrome-extension-cli": "bin/create-cli-project"
+  },
+  "keywords": [
+    "cli",
+    "create-cli-project"
+  ],
+  "author": "wenguang",
+  "license": "ISC",
+  "dependencies": {
+    "@vue/cli": "^4.1.2",
+    "arg": "^4.1.2",
+    "cross-spawn": "^7.0.1",
+    "ejs": "^3.0.1",
+    "esm": "^3.2.25",
+    "fs-extra": "^8.1.0",
+    "globby": "^11.0.0",
+    "inquirer": "^7.0.3",
+    "isbinaryfile": "^4.0.4",
+    "listr": "^0.14.3",
+    "pkg-install": "^1.0.0",
+    "yaml-front-matter": "^4.1.0"
+  }
+}

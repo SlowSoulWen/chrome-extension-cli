@@ -1,0 +1,68 @@
+import arg from 'arg';
+import inquirer from 'inquirer';
+import { createProject } from './main';
+
+const DEFAULT_OPTIONS = {
+    projectName: 'my-chrome-extension',
+    backgroundMode: 'js',
+}
+
+function parseArgumentsIntoOptions(rawArgs) {
+    const args = arg({
+        '--name': String, // 项目名称
+        '--target': String, // 项目地址
+        '--default': Boolean, // 跳过选项并使用默认配置
+        '-n': '--name',
+        '-t': '--target',
+        '-d': '--default',
+    }, {
+        argv: rawArgs.slice(2)
+    });
+    return {
+        projectName: args['--name'] || '',
+        target: args['--target'] || '',
+        default: args['--default'] || '',
+    };
+}
+
+async function promptForMissingOptions(options) {
+    const questions = [];
+    if (!options.projectName) {
+        questions.push({
+            type: 'input',
+            name: 'projectName',
+            message: 'Please input your project name',
+            default: DEFAULT_OPTIONS.projectName,
+            validate: value => !!value
+        });
+    }
+    questions.push({
+        type: 'list',
+        name: 'backgroundMode',
+        message: '请选择background的模式',
+        default: DEFAULT_OPTIONS.backgroundMode,
+        choices: [
+            { name: 'JS', value: 'js' },
+            { name: 'HTML', value: 'html' },
+        ],
+    });
+    const answers = await inquirer.prompt(questions);
+    return {
+        ...options,
+        projectName: answers.projectName || options.projectName,
+        backgroundMode: answers.backgroundMode,
+    };
+}
+
+export async function cli (args) {
+    let options = parseArgumentsIntoOptions(args);
+    if (!options.default) {
+        options = await promptForMissingOptions(options);
+    } else {
+        options = {
+            ...options,
+            ...DEFAULT_OPTIONS,
+        }
+    }
+    await createProject(options);
+}
