@@ -1,6 +1,6 @@
-# chrome-extension-cli
+# Chrome Extension CLI
 
-### 基于vue-cli的Chrome扩展程序开发脚手架
+### 一个基于vue-cli的Chrome扩展程序开发脚手架
 
 # 功能
 
@@ -12,12 +12,12 @@
 # 安装
 
 ``` shell
-npm install chrome-extension-cli
+npm install crx-vue-cli
 ```
 # 使用
 
 ``` shell
-chrome-extension-cli [options]
+crx-vue-cli [options]
 ```
 
 ### options选项
