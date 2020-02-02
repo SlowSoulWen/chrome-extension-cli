@@ -4,9 +4,12 @@ import globby from 'globby';
 import spawn from 'cross-spawn';
 import ejs from 'ejs';
 import { isBinaryFileSync } from 'isBinaryFile';
+import semver from 'semver';
+import inquirer from 'inquirer';
 import writeFileTree from '../utils/writeFileTree';
 import config from './configuration.js';
 import Log from '../utils/log';
+import { hasVueCLI } from '../utils/versionCheck';
 
 const yaml = require('yaml-front-matter');
 const log = new Log();
@@ -77,14 +80,52 @@ export async function createProject(options) {
         throw err;
     }
     try {
+        if (!hasVueCLI()) {
+            // Vue-cli is not installed, prompt for installation.
+            const answers = await inquirer.prompt({
+                type: 'confirm',
+                name: 'installVueCLI',
+                message: '检查到尚未安装vue-cli，是否安装？',
+                default: true,
+            });
+            if (answers.installVueCLI) {
+                log.success('👋    正在安装vue-cli...');
+                spawn.sync('npm', ['install', '@vue/cli', '-g'], {
+                    cwd,
+                    stdio: 'inherit',
+                });
+            } else {
+                throw {
+                    msg: '请先安装vue-cli：\n执行 npm install -g @vue/cli 或者 yarn global add @vue/cli',
+                    type: 'warning'
+                }
+            }
+        }
+
+        // check vue-cli version
+        const { stdout } = spawn.sync('vue', ['--version'], {
+            encoding: 'utf-8',
+        });
+        if (stdout) {
+            const [version] = stdout.match(/(\d+\.\d+\.\d)/);
+            if (!semver.satisfies(version, '>=3.x')) {
+                // vue-cli version too low
+                throw {
+                    msg: '当前安装的vue-cli版本太低，请更新至3.x以上版本',
+                    type: 'warning',
+                }
+            }
+        }
+
         // create vue project by vue-cli
+        log.success('🚗    正在启动vue-cli...');
         spawn.sync('vue', ['create', options.projectName], {
             cwd,
             stdio: 'inherit',
         });
 
         log.clearLog();
-        log.success(`🚗   vue-cli项目构建成功，正在配置chrome扩展相关内容...`);
+        log.success(`🏠   vue-cli项目构建成功，正在配置chrome扩展相关内容...`);
 
         // add chrome extension template to target project
         await renderTemplate2TargetProject(tarProjectPath, options);
@@ -126,6 +167,11 @@ export async function createProject(options) {
         });
 
     } catch (err) {
-        console.log('err', err);
+        const { msg, type = 'error' } = err;
+        if (msg) {
+            log[type](msg);
+        } else {
+            console.error(err);
+        }
     }
 }

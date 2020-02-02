@@ -6,11 +6,11 @@ export default class Log {
     }
 
     error(msg) {
-        this.log(chalk.bgRed(msg));
+        this.log(chalk.red(msg));
     }
 
     warning(msg) {
-        this.log(chalk.bgYellow(msg));
+        this.log(chalk.yellow(msg));
     }
 
     success(msg) {
