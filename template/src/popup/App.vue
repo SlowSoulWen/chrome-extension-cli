@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="../assets/logo.png">
-    <h1>aesdasd</h1>
     <HelloWorld msg="Welcome to Your popup"/>
   </div>
 </template>
