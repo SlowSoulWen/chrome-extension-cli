@@ -119,7 +119,7 @@ export async function createProject(options) {
 
         // create vue project by vue-cli
         log.success('🚗    正在启动vue-cli...');
-        spawn.sync('vue', ['create', options.projectName], {
+        spawn.sync('vue', ['create', options.projectName, '--no-git'], {
             cwd,
             stdio: 'inherit',
         });
@@ -165,6 +165,11 @@ export async function createProject(options) {
             cwd: tarProjectPath,
             stdio: 'inherit',
         });
+
+        // success
+        log.success('\n');
+        log.success('🎉  Successfully created project');
+        log.success(`👉  Get started with the following commands:\n\n` + 'npm run serve');
 
     } catch (err) {
         const { msg, type = 'error' } = err;
