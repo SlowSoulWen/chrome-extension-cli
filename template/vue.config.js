@@ -23,6 +23,9 @@ const config = {
             chunks: ['chunk-vendors', 'chunk-common', 'popup'],
         },
     },
+    css: {
+        extract: true,
+    },
     chainWebpack,
 }
 

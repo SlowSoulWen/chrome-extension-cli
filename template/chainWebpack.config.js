@@ -33,6 +33,8 @@ const chainWebpack = config => {
             cleanStaleWebpackAssets: false,
         }]);
     }
+
+    config.optimization.clear();
 }
 
 module.exports = chainWebpack;

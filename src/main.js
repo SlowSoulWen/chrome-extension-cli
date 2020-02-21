@@ -40,7 +40,7 @@ function getBackgroundMode (options) {
         case 'js':
         default:
             return {
-                scripts: ["./js/chunk-common.js", "./js/chunk-vendors.js", "./background.js"],
+                scripts: ["./background.js"],
             }
         case 'html':
             return {

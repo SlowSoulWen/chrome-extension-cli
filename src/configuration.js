@@ -4,7 +4,8 @@ export default {
     },
     content_scripts: [{
         "all_frames": false,
-        "js": ["./js/chunk-common.js", "./js/chunk-vendors.js", "./contentScripts.js"],
+        "js": ["./contentScripts.js"],
+        "css": ["./css/contentScripts.css"],
         "matches": ["http://*/*", "https://*/*"],
         "run_at": "document_start"
     }],
