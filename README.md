@@ -7,7 +7,7 @@
 - [x] 项目基于vue-cli，组件化开发更加便利
 - [x] 支持chrome扩展开发过程中的热重载
 - [x] 支持开发实时预览
-- [ ] 一键打包扩展
+- [x] 一键打包扩展
 
 # 安装
 
@@ -36,6 +36,6 @@ npm run serve // 开发模式
 
 ## Chrome扩展开发相关文档
 
-[官方网档](https://developer.chrome.com/extensions)
+[官方文档](https://developer.chrome.com/extensions)
 
 [《Chrome插件开发全攻略》](https://github.com/sxei/chrome-plugin-demo)
