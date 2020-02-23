@@ -7,6 +7,7 @@ const config = {
         hot: false,
         disableHostCheck: true,
     },
+    filenameHashing: false,
     pages: {
         options: {
             entry: 'src/options/index.js',
