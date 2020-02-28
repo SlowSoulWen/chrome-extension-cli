@@ -30,6 +30,6 @@ export default {
         "http://*/*", // 可以通过executeScript或者insertCSS访问的网站
         "https://*/*" // 可以通过executeScript或者insertCSS访问的网站
     ],
-    "version": "1.0.0",
-    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+    version: "1.0.0",
+    content_security_policy: "script-src 'self' 'unsafe-eval'; object-src 'self'",
 }

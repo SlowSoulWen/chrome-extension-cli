@@ -1,1 +1,1 @@
-console.log('Content script working mother fucker...'); // eslint-disable-line
+console.log('Content Script working ...'); // eslint-disable-line

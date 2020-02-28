@@ -6,6 +6,7 @@ import getVersion from '../utils/getVersion';
 const DEFAULT_OPTIONS = {
     projectName: 'my-chrome-extension',
     backgroundMode: 'js',
+    devTool: false,
 }
 
 function parseArgumentsIntoOptions(rawArgs) {
@@ -41,6 +42,12 @@ async function promptForMissingOptions(options) {
         });
     }
     questions.push({
+        type: 'confirm',
+        name: 'devTool',
+        message: '是否需要对开发者工具(devTool)做扩展开发?',
+        default: DEFAULT_OPTIONS.devTool,
+    })
+    questions.push({
         type: 'list',
         name: 'backgroundMode',
         message: '请选择background的模式',
@@ -55,6 +62,7 @@ async function promptForMissingOptions(options) {
         ...options,
         projectName: answers.projectName || options.projectName,
         backgroundMode: answers.backgroundMode,
+        devTool: answers.devTool,
     };
 }
 

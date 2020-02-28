@@ -66,6 +66,12 @@ async function renderTemplate2TargetProject(target, options) {
         delete files['src/background/App.vue'];
         files['src/background/index.js'] = "console.log('background...'); // eslint-disable-line \n";
     };
+    if (!options.devTool) {
+        delete files['src/devtool/index.js'];
+        delete files['src/devtool/App.vue'];
+    } else {
+        config["devtools_page"] = "devtool.html";
+    }
     await writeFileTree(target, files, {});
 }
 
@@ -156,7 +162,7 @@ export async function createProject(options) {
 
         // set .env
         await writeFileTree(tarProjectPath, {
-            '.env': `BACKGROUND_MODE=${options.backgroundMode}`
+            '.env': `BACKGROUND_MODE=${options.backgroundMode}\nDEVTOOL_MODE=${options.devTool}`
         });
 
         // install node_module

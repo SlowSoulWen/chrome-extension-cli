@@ -1,5 +1,6 @@
 const chainWebpack = require('./chainWebpack.config.js');
 const backgroundMode = process.env.BACKGROUND_MODE;
+const devtoolMode = process.env.DEVTOOL_MODE;
 
 const config = {
     devServer: {
@@ -37,6 +38,15 @@ if (backgroundMode === 'html') {
         filename: 'background.html',
         title: 'Background',
         chunks: ['chunk-vendors', 'chunk-common', 'background'],
+    }
+}
+
+if (devtoolMode) {
+    config.pages['devtool'] = {
+        entry: 'src/devtool/index.js',
+        template: 'public/index.html',
+        filename: 'devtool.html',
+        title: 'Devtool',
     }
 }
 
