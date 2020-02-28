@@ -5,7 +5,6 @@ export default {
     content_scripts: [{
         "all_frames": false,
         "js": ["./contentScripts.js"],
-        "css": ["./css/contentScripts.css"],
         "matches": ["http://*/*", "https://*/*"],
         "run_at": "document_start"
     }],

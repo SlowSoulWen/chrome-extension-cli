@@ -1,6 +1,7 @@
 import arg from 'arg';
 import inquirer from 'inquirer';
 import { createProject } from './main';
+import getVersion from '../utils/getVersion';
 
 const DEFAULT_OPTIONS = {
     projectName: 'my-chrome-extension',
@@ -12,13 +13,16 @@ function parseArgumentsIntoOptions(rawArgs) {
         '--name': String, // 项目名称
         '--target': String, // 项目地址
         '--default': Boolean, // 跳过选项并使用默认配置
+        '--version': Boolean, // 获取当前版本
         '-n': '--name',
         '-t': '--target',
         '-d': '--default',
+        '-v': '--version',
     }, {
         argv: rawArgs.slice(2)
     });
     return {
+        getVersion: args['--version'] || false,
         projectName: args['--name'] || '',
         target: args['--target'] || '',
         default: args['--default'] || '',
@@ -56,6 +60,10 @@ async function promptForMissingOptions(options) {
 
 export async function cli (args) {
     let options = parseArgumentsIntoOptions(args);
+    if (options.getVersion) {
+        getVersion();
+        return;
+    }
     if (!options.default) {
         options = await promptForMissingOptions(options);
     } else {
