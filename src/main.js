@@ -72,6 +72,14 @@ async function renderTemplate2TargetProject(target, options) {
     } else {
         config["devtools_page"] = "devtool.html";
     }
+    if (!options.newTab) {
+        delete files['src/newtab/index.js'];
+        delete files['src/newtab/App.vue'];
+    } else {
+        config["chrome_url_overrides"] = {
+            "newtab": "newtab.html"
+        };
+    }
     await writeFileTree(target, files, {});
 }
 
@@ -162,7 +170,7 @@ export async function createProject(options) {
 
         // set .env
         await writeFileTree(tarProjectPath, {
-            '.env': `BACKGROUND_MODE=${options.backgroundMode}\nDEVTOOL_MODE=${options.devTool}`
+            '.env': `BACKGROUND_MODE=${options.backgroundMode}\nDEVTOOL_MODE=${options.devTool}\nNEWTAB_MODE=${options.newTab}`
         });
 
         // install node_module

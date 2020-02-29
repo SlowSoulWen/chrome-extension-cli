@@ -1,6 +1,7 @@
 const chainWebpack = require('./chainWebpack.config.js');
 const backgroundMode = process.env.BACKGROUND_MODE;
 const devtoolMode = process.env.DEVTOOL_MODE;
+const newtabMode = process.env.NEWTAB_MODE;
 
 const config = {
     devServer: {
@@ -47,6 +48,15 @@ if (devtoolMode) {
         template: 'public/index.html',
         filename: 'devtool.html',
         title: 'Devtool',
+    }
+}
+
+if (newtabMode) {
+    config.pages['newtab'] = {
+        entry: 'src/newtab/index.js',
+        template: 'public/index.html',
+        filename: 'newtab.html',
+        title: 'NewTab',
     }
 }
 
