@@ -17,6 +17,11 @@ const pkgDevDependencies = {
     "webpack-extension-reloader": "^1.1.4",
     "clean-webpack-plugin": "^3.0.0",
 };
+// .env mode
+let env_mode = `
+# The following environment variables will be associated with the relevant configuration on webpack.
+# Deletion and modification may cause the program to crash.
+`;
 
 function renderFile(name) {
     if (isBinaryFileSync(name)) {
@@ -71,6 +76,7 @@ async function renderTemplate2TargetProject(target, options) {
         delete files['src/devtool/App.vue'];
     } else {
         config["devtools_page"] = "devtool.html";
+        env_mode += `\nDEVTOOL_MODE=true`;
     }
     if (!options.newTab) {
         delete files['src/newtab/index.js'];
@@ -79,6 +85,7 @@ async function renderTemplate2TargetProject(target, options) {
         config["chrome_url_overrides"] = {
             "newtab": "newtab.html"
         };
+        env_mode += `\nNEWTAB_MODE=true`;
     }
     await writeFileTree(target, files, {});
 }
@@ -86,6 +93,8 @@ async function renderTemplate2TargetProject(target, options) {
 export async function createProject(options) {
     const cwd = options.target || process.cwd();
     const tarProjectPath = path.resolve(cwd, options.projectName);
+    env_mode += `\nBACKGROUND_MODE=${options.backgroundMode}`;
+
     try {
         fs.statSync(cwd);
         fs.accessSync(cwd, fs.constants.R_OK | fs.constants.W_OK);
@@ -170,7 +179,7 @@ export async function createProject(options) {
 
         // set .env
         await writeFileTree(tarProjectPath, {
-            '.env': `BACKGROUND_MODE=${options.backgroundMode}\nDEVTOOL_MODE=${options.devTool}\nNEWTAB_MODE=${options.newTab}`
+            '.env': env_mode,
         });
 
         // install node_module
