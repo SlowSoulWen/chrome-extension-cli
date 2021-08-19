@@ -46,6 +46,10 @@ npm run serve // 开发模式
 
 通过 `Vue.prototype.chrome = chrome` (Vue2.x) 或者 `app.config.globalProperties.chrome = chrome`(Vue3.x)将`chrome`实例作为Vue的全局属性注入，因此你可以很方便的通过`this.chrome`来调用Chrome插件提供的能力。
 
+## Demo
+这是一个半成品，一个可以在页面做高亮备注的Marker插件，它基于`crx-vue-cli`搭建并实现，如果你不知道怎么着手开发插件，那希望这个项目对你有所帮助。
+[Github地址](https://github.com/SlowSoulWen/chrome-extension-marker)
+
 ## Chrome扩展开发相关文档
 
 [官方文档](https://developer.chrome.com/extensions)
