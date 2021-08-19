@@ -2,16 +2,15 @@ import fs from 'fs-extra';
 import path from 'path';
 import globby from 'globby';
 import spawn from 'cross-spawn';
-import ejs from 'ejs';
-import { isBinaryFileSync } from 'isBinaryFile';
 import semver from 'semver';
 import inquirer from 'inquirer';
 import writeFileTree from '../utils/writeFileTree';
+import renderFile from '../utils/renderFile';
+import deleteFile from '../utils/deleteFile';
 import config from './configuration.js';
 import Log from '../utils/log';
 import { hasVueCLI } from '../utils/versionCheck';
 
-const yaml = require('yaml-front-matter');
 const log = new Log();
 const pkgDevDependencies = {
     "webpack-extension-reloader": "^1.1.4",
@@ -22,22 +21,6 @@ let env_mode = `
 # The following environment variables will be associated with the relevant configuration on webpack.
 # Deletion and modification may cause the program to crash.
 `;
-
-function renderFile(name) {
-    if (isBinaryFileSync(name)) {
-        return fs.readFileSync(name) // return buffer
-    }
-    const template = fs.readFileSync(name, 'utf-8');
-    const parsed = yaml.loadFront(template);
-    const content = parsed.__content;
-    const finalTemplate = content.trim() + `\n`;
-    try {
-        ejs.render(finalTemplate, null, {});
-    } catch(err) {
-        console.log('err', err);
-    }
-    return ejs.render(finalTemplate, null, {});
-}
 
 function getBackgroundMode (options) {
     const { backgroundMode } = options;
@@ -56,7 +39,24 @@ function getBackgroundMode (options) {
 
 async function renderTemplate2TargetProject(target, options) {
     let files = [];
-    const tmpDirPath = path.resolve(__dirname, '../template');
+    let versionPath = '';
+
+    // get Vue version
+    const pkgJson = await fs.readJSON(path.resolve(target, './package.json'));
+    const matchRes = (pkgJson.dependencies.vue || '').match(/(\d+)\.\d+\.\d+/);
+    const vueVersion = matchRes ? matchRes[1] : '';
+
+    switch (vueVersion) {
+        case '2':
+        default:
+            versionPath = 'v2';
+            break;
+        case '3':
+            versionPath = 'v3';
+            break;
+    }
+    
+    const tmpDirPath = path.resolve(__dirname, `../template/${versionPath}`);
     const tmpFiles = await globby(['**/*'], {
         cwd: tmpDirPath
     });
@@ -67,10 +67,14 @@ async function renderTemplate2TargetProject(target, options) {
             files[filePath] = content;
         }
     };
+
+    // background differentiated configuration
     if (options.backgroundMode === 'js') {
         delete files['src/background/App.vue'];
         files['src/background/index.js'] = "console.log('background...'); // eslint-disable-line \n";
     };
+
+    // devTool differentiated configuration
     if (!options.devTool) {
         delete files['src/devtool/index.js'];
         delete files['src/devtool/App.vue'];
@@ -78,6 +82,8 @@ async function renderTemplate2TargetProject(target, options) {
         config["devtools_page"] = "devtool.html";
         env_mode += `\nDEVTOOL_MODE=true`;
     }
+
+    // newTab differentiated configuration
     if (!options.newTab) {
         delete files['src/newtab/index.js'];
         delete files['src/newtab/App.vue'];
@@ -87,6 +93,7 @@ async function renderTemplate2TargetProject(target, options) {
         };
         env_mode += `\nNEWTAB_MODE=true`;
     }
+
     await writeFileTree(target, files, {});
 }
 
@@ -149,6 +156,10 @@ export async function createProject(options) {
 
         log.clearLog();
         log.success(`🏠   vue-cli项目构建成功，正在配置chrome扩展相关内容...`);
+
+        // delete useless files
+        deleteFile(`${tarProjectPath}/src/main.js`);
+        deleteFile(`${tarProjectPath}/src/App.vue`);
 
         // add chrome extension template to target project
         await renderTemplate2TargetProject(tarProjectPath, options);

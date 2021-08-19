@@ -4,7 +4,8 @@
   "description": "基于vue-cli的Chrome扩展程序(crx)开发脚手架",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node scripts/clear && node bin/create-cli-project --name=example"
   },
   "bin": {
     "@crx-vue-cli/crx-vue-cli": "bin/create-cli-project",

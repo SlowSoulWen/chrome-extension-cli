@@ -37,7 +37,7 @@ async function promptForMissingOptions(options) {
         questions.push({
             type: 'input',
             name: 'projectName',
-            message: 'Please input your project name',
+            message: '请输入您的项目名称',
             default: DEFAULT_OPTIONS.projectName,
             validate: value => !!value
         });
@@ -45,7 +45,7 @@ async function promptForMissingOptions(options) {
     questions.push({
         type: 'list',
         name: 'backgroundMode',
-        message: '请选择background的模式',
+        message: '请选择background Mode(网页或者JS)',
         default: DEFAULT_OPTIONS.backgroundMode,
         choices: [
             { name: 'JS', value: 'js' },
