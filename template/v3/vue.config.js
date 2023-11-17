@@ -5,9 +5,10 @@ const newtabMode = process.env.NEWTAB_MODE;
 
 const config = {
     devServer: {
-        writeToDisk: true,
+        devMiddleware: {
+            writeToDisk: true,
+        },
         hot: false,
-        disableHostCheck: true,
     },
     filenameHashing: false,
     pages: {

@@ -1,6 +1,6 @@
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ExtensionReloader = require('webpack-extension-reloader');
+const ExtensionReloader = require('webpack-ext-reloader')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const isDevMode = process.env.NODE_ENV === 'development'
@@ -14,10 +14,14 @@ const chainWebpack = config => {
     config.output.filename('[name].js');
     config.plugins.delete('copy');
 
-    config.plugin('CopyWebpackPlugin').use(CopyWebpackPlugin, [[
-      { from: 'src/assets', to: 'assets' },
-      { from: 'src/manifest.json', to: 'manifest.json', flatten: true },
-    ]]);
+    config.plugin('CopyWebpackPlugin').use(CopyWebpackPlugin, [
+      {
+        patterns: [
+          { from: 'src/assets', to: 'assets' },
+          { from: 'src/manifest.json', to: 'manifest.json' },
+        ],
+      },
+    ])
 
     if (isDevMode) {
         // development-mode
