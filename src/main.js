@@ -13,7 +13,7 @@ import { hasVueCLI } from '../utils/versionCheck';
 
 const log = new Log();
 const pkgDevDependencies = {
-    "webpack-extension-reloader": "^1.1.4",
+    "webpack-ext-reloader": "^1.1.10",
     "clean-webpack-plugin": "^3.0.0",
 };
 // .env mode

@@ -1,6 +1,6 @@
 {
   "name": "crx-vue-cli",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "description": "基于vue-cli的Chrome扩展程序(crx)开发脚手架",
   "main": "src/index.js",
   "scripts": {
